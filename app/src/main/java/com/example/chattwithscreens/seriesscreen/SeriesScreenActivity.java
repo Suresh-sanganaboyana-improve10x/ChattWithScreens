@@ -5,12 +5,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.chattwithscreens.R;
 import com.example.chattwithscreens.seriesscreen.Series;
 import com.example.chattwithscreens.seriesscreen.SeriesAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SeriesScreenActivity extends AppCompatActivity {
     public ArrayList<Series> seriesList;
@@ -25,6 +31,26 @@ public class SeriesScreenActivity extends AppCompatActivity {
 
         setData();
         setupRecyclerView();
+
+        fetchData();
+    }
+
+    private void fetchData() {
+        SeriesApi seriesApi = new SeriesApi();
+        SeriesService seriesService = seriesApi.createSeriesService();
+        Call<List<Series>> call = seriesService.fetchTasks();
+        call.enqueue(new Callback<List<Series>>() {
+            @Override
+            public void onResponse(Call<List<Series>> call, Response<List<Series>> response) {
+                List<Series> seriesList = response.body();
+                seriesAdapter.setupData(seriesList);
+            }
+
+            @Override
+            public void onFailure(Call<List<Series>> call, Throwable t) {
+                Toast.makeText(SeriesScreenActivity.this, "Fetch data failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void setupRecyclerView() {

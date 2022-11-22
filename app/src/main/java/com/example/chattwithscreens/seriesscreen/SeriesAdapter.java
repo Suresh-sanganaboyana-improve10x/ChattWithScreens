@@ -11,10 +11,11 @@ import com.example.chattwithscreens.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SeriesAdapter extends RecyclerView.Adapter<SeriesViewHolder> {
-    public ArrayList<Series> seriesArrayList;
-    public void setupData(ArrayList<Series> series) {
+    public List<Series> seriesArrayList;
+    public void setupData(List<Series> series) {
         seriesArrayList = series;
         notifyDataSetChanged();
     }
